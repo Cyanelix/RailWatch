@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RailWatch</string>
+    <string name="from_station">From</string>
+    <string name="to_station">To</string>
+    <string name="button_send">Send</string>
+    <string name="message">[message]</string>
+</resources>
