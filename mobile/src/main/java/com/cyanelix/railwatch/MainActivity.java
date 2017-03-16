@@ -1,37 +1,78 @@
 package com.cyanelix.railwatch;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
 
-import com.cyanelix.railwatch.microtypes.EditTextId;
-import com.cyanelix.railwatch.microtypes.IntentKey;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView trainTimeMessageText;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_choose_stations) {
+            chooseStations();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_refresh) {
+            getTrainTimes();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.cyanelix.railwatch.R.layout.activity_main);
+        trainTimeMessageText = (TextView) findViewById(com.cyanelix.railwatch.R.id.content_value);
+        getTrainTimes();
     }
 
-    /** Called when the user clicks the Send button */
-    public void sendMessage(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        putEditTextValueInIntent(intent, IntentKey.FROM_STATION, EditTextId.FROM_STATION);
-        putEditTextValueInIntent(intent, IntentKey.TO_STATION, EditTextId.TO_STATION);
+    private void chooseStations() {
+        Intent intent = new Intent(this, ChooseStationsActivity.class);
         startActivity(intent);
     }
 
-    private void putEditTextValueInIntent(Intent intent, IntentKey intentKey, EditTextId editTextId) {
-        intent.putExtra(intentKey.getKey(), getEditTextValue(editTextId));
+    private void getTrainTimes() {
+        trainTimeMessageText.setText(R.string.getting_times);
+        new HttpRequestTask().execute();
     }
 
-    @NonNull
-    private String getEditTextValue(EditTextId editTextId) {
-        EditText editText = (EditText) findViewById(editTextId.getId());
-        return editText.getText().toString();
+    private class HttpRequestTask extends AsyncTask<Void, Void, TrainTime[]> {
+        @Override
+        protected TrainTime[] doInBackground(Void... params) {
+            try {
+                final String url = "http://railwatch.cyanelix.com/departures?from=KYN&to=BRI";
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                TrainTime[] trainTimes = restTemplate.getForObject(url, TrainTime[].class);
+                return trainTimes;
+            } catch (Exception e) {
+                Log.e("ChooseStationsActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(TrainTime[] trainTimes) {
+            trainTimeMessageText.setText(trainTimes[0].getScheduledDepartureTime());
+        }
     }
 }

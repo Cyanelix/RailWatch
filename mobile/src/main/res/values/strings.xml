@@ -4,4 +4,7 @@
     <string name="to_station">To</string>
     <string name="button_send">Send</string>
     <string name="message">[message]</string>
+    <string name="refresh">Refresh</string>
+    <string name="getting_times">Looking up train times...</string>
+    <string name="choose_stations">Choose Stations</string>
 </resources>
