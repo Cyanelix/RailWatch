@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.cyanelix.railwatch.service.times.TrainTimesService;
+
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -57,22 +59,13 @@ public class MainActivity extends AppCompatActivity {
     private class HttpRequestTask extends AsyncTask<Void, Void, TrainTime[]> {
         @Override
         protected TrainTime[] doInBackground(Void... params) {
-            try {
-                final String url = "http://railwatch.cyanelix.com/departures?from=KYN&to=BRI";
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                TrainTime[] trainTimes = restTemplate.getForObject(url, TrainTime[].class);
-                return trainTimes;
-            } catch (Exception e) {
-                Log.e("ChooseStationsActivity", e.getMessage(), e);
-            }
-
-            return null;
+            TrainTimesService trainTimesService = new TrainTimesService();
+            return trainTimesService.getTrainTimes();
         }
 
         @Override
         protected void onPostExecute(TrainTime[] trainTimes) {
-            trainTimeMessageText.setText(trainTimes[0].getScheduledDepartureTime());
+            trainTimeMessageText.setText(trainTimes[0].toString());
         }
     }
 }
