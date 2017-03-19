@@ -4,17 +4,19 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.cyanelix.railwatch.service.times.TrainTimesClient;
 import com.cyanelix.railwatch.service.times.TrainTimesService;
 
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
+    @Inject
+    TrainTimesService trainTimesService;
+
     private TextView trainTimeMessageText;
 
     @Override
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
         setContentView(com.cyanelix.railwatch.R.layout.activity_main);
         trainTimeMessageText = (TextView) findViewById(com.cyanelix.railwatch.R.id.content_value);
         getTrainTimes();
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private class HttpRequestTask extends AsyncTask<Void, Void, TrainTime[]> {
         @Override
         protected TrainTime[] doInBackground(Void... params) {
-            TrainTimesService trainTimesService = new TrainTimesService();
+            TrainTimesService trainTimesService = DaggerTrainTimesComponent.create().trainTimesService();
             return trainTimesService.getTrainTimes();
         }
 
