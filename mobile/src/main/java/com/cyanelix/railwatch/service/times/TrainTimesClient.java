@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 public class TrainTimesClient {
     private static final String URL = "http://railwatch.cyanelix.com/departures?from=KYN&to=BRI";
+
     @Inject
     RestTemplate restTemplate;
 
@@ -18,8 +19,7 @@ public class TrainTimesClient {
 
     public TrainTime[] getTrainTimes() {
         try {
-            TrainTime[] trainTimes = restTemplate.getForObject(URL, TrainTime[].class);
-            return trainTimes;
+            return restTemplate.getForObject(URL, TrainTime[].class);
         } catch (Exception e) {
             Log.e("ChooseStationsActivity", e.getMessage(), e);
             return null;
