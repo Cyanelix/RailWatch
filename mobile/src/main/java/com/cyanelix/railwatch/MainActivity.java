@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.cyanelix.railwatch.service.times.TrainTimesClient;
+import com.cyanelix.railwatch.domain.TrainTime;
 import com.cyanelix.railwatch.service.times.TrainTimesService;
 
 import javax.inject.Inject;

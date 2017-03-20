@@ -1,6 +1,6 @@
 package com.cyanelix.railwatch.service.times;
 
-import com.cyanelix.railwatch.TrainTime;
+import com.cyanelix.railwatch.domain.TrainTime;
 
 import org.junit.Rule;
 import org.junit.Test;

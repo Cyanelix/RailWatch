@@ -1,4 +1,4 @@
-package com.cyanelix.railwatch;
+package com.cyanelix.railwatch.domain;
 
 public class TrainTime {
     private String scheduledDepartureTime;

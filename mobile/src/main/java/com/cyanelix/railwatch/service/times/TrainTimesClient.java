@@ -2,7 +2,7 @@ package com.cyanelix.railwatch.service.times;
 
 import android.util.Log;
 
-import com.cyanelix.railwatch.TrainTime;
+import com.cyanelix.railwatch.domain.TrainTime;
 
 import org.springframework.web.client.RestTemplate;
 
