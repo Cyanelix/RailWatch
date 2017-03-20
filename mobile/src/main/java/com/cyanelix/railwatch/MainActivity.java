@@ -20,6 +20,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView trainTimeMessageText;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
+
+        setContentView(com.cyanelix.railwatch.R.layout.activity_main);
+        trainTimeMessageText = (TextView) findViewById(com.cyanelix.railwatch.R.id.content_value);
+
+        getTrainTimes();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
@@ -40,15 +51,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
-        setContentView(com.cyanelix.railwatch.R.layout.activity_main);
-        trainTimeMessageText = (TextView) findViewById(com.cyanelix.railwatch.R.id.content_value);
-        getTrainTimes();
-    }
-
     private void chooseStations() {
         Intent intent = new Intent(this, ChooseStationsActivity.class);
         startActivity(intent);
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private class HttpRequestTask extends AsyncTask<Void, Void, TrainTime[]> {
         @Override
         protected TrainTime[] doInBackground(Void... params) {
-            TrainTimesService trainTimesService = DaggerTrainTimesComponent.create().trainTimesService();
             return trainTimesService.getTrainTimes();
         }
 
