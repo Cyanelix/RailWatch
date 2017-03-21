@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
 
-        setContentView(com.cyanelix.railwatch.R.layout.activity_main);
-        trainTimeMessageText = (TextView) findViewById(com.cyanelix.railwatch.R.id.content_value);
+        setContentView(R.layout.activity_main);
+        trainTimeMessageText = (TextView) findViewById(R.id.content_value);
 
         getTrainTimes();
     }
