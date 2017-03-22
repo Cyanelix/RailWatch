@@ -1,5 +1,8 @@
 package com.cyanelix.railwatch.domain;
 
+
+import org.apache.commons.lang3.StringUtils;
+
 public class TrainTime {
     private String scheduledDepartureTime;
     private String expectedDepartureTime;
@@ -10,11 +13,11 @@ public class TrainTime {
             return scheduledDepartureTime;
         }
 
-        if (message.isEmpty()) {
+        if (StringUtils.isBlank(message)) {
             return scheduledDepartureTime + " -> " + expectedDepartureTime;
         }
 
-        if (expectedDepartureTime.isEmpty()) {
+        if (StringUtils.isBlank(expectedDepartureTime)) {
             return scheduledDepartureTime + " (" + message + ")";
         }
 
