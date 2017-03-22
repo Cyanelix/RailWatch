@@ -23,7 +23,7 @@ public class TrainTimesClient {
         try {
             return restTemplate.getForObject(url, TrainTime[].class);
         } catch (Exception e) {
-            Log.e("ChooseStationsActivity", e.getMessage(), e);
+            Log.e("TrainTimesClient", e.getMessage(), e);
             return null;
         }
     }

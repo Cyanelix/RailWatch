@@ -22,15 +22,15 @@ public class MainActivityTest {
 
     @Test
     public void refresh() {
-        onView(withId(R.id.content_value))
-            .check(matches(withId(R.id.content_value)));
+        onView(withId(R.id.train_times))
+            .check(matches(withId(R.id.train_times)));
 
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
 
         onView(withText(R.string.refresh))
             .perform(click());
 
-        onView(withId(R.id.content_value))
-                .check(matches(withId(R.id.content_value)));
+        onView(withId(R.id.train_times))
+                .check(matches(withId(R.id.train_times)));
     }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cyanelix.railwatch.domain.TrainTime;
@@ -17,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     TrainTimesService trainTimesService;
 
-    private TextView trainTimeMessageText;
+    private ListView trainTimesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
 
         setContentView(R.layout.activity_main);
-        trainTimeMessageText = (TextView) findViewById(R.id.content_value);
+        trainTimesList = (ListView) findViewById(R.id.train_times);
 
         getTrainTimes();
     }
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTrainTimes() {
-        trainTimeMessageText.setText(R.string.getting_times);
+//        trainTimesList.setText(R.string.getting_times);
         new HttpRequestTask().execute();
     }
 
@@ -69,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(TrainTime[] trainTimes) {
-            trainTimeMessageText.setText(trainTimes[0].toString());
+            ArrayAdapter<TrainTime> timesAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, trainTimes);
+            trainTimesList.setAdapter(timesAdapter);
+//            trainTimesList.setText(trainTimes[0].toString());
         }
     }
 }
