@@ -1,14 +1,8 @@
 package com.cyanelix.railwatch;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.cyanelix.railwatch.domain.TrainTime;
+import com.cyanelix.railwatch.service.notification.NotificationService;
 import com.cyanelix.railwatch.service.times.TrainTimesService;
 
 import javax.inject.Inject;
@@ -23,6 +18,9 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
     @Inject
     TrainTimesService trainTimesService;
+
+    @Inject
+    NotificationService notificationService;
 
     private ListView trainTimesList;
 
@@ -78,33 +76,8 @@ public class MainActivity extends AppCompatActivity {
             ArrayAdapter<TrainTime> timesAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, trainTimes);
             trainTimesList.setAdapter(timesAdapter);
 
-            createNotification(trainTimes);
+            notificationService.notify(MainActivity.this, trainTimes);
         }
 
-        private void createNotification(TrainTime[] trainTimes) {
-            Intent mainActivityIntent = new Intent(MainActivity.this, MainActivity.class);
-
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(MainActivity.this);
-            stackBuilder.addParentStack(MainActivity.class);
-            stackBuilder.addNextIntent(mainActivityIntent);
-            PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle("Times");
-
-            for (TrainTime trainTime : trainTimes) {
-                inboxStyle.addLine(trainTime.toString());
-            }
-
-            NotificationCompat.Builder notificationBuilder =
-                    new NotificationCompat.Builder(MainActivity.this)
-                    .setSmallIcon(R.drawable.notification_icon)
-                    .setContentTitle("Train times")
-                    .setContentIntent(pendingIntent)
-                    .setStyle(inboxStyle);
-
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(1, notificationBuilder.build());
-        }
     }
 }
