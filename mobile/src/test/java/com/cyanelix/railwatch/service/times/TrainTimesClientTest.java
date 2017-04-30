@@ -1,5 +1,6 @@
 package com.cyanelix.railwatch.service.times;
 
+import com.cyanelix.railwatch.config.Urls;
 import com.cyanelix.railwatch.domain.TrainTime;
 
 import org.junit.Rule;
@@ -9,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.URL;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -22,13 +25,17 @@ public class TrainTimesClientTest {
     @Mock
     private RestTemplate restTemplate;
 
+    @Mock
+    private Urls urls;
+
     @InjectMocks
     private TrainTimesClient trainTimesClient;
 
     @Test
     public void noTrainTimesRetrieved_emptyArrayReturned() {
         // Given...
-        given(restTemplate.getForObject("http://railwatch.cyanelix.com/departures?from=KYN&to=BRI", TrainTime[].class))
+        given(urls.getDeparturesUrl("KYN", "BRI")).willReturn("http://example.com/departures?from=KYN&to=BRI");
+        given(restTemplate.getForObject("http://example.com/departures?from=KYN&to=BRI", TrainTime[].class))
                 .willReturn(new TrainTime[0]);
 
         // When...
@@ -42,7 +49,8 @@ public class TrainTimesClientTest {
     public void trainTimesRetrieved_arrayReturned() {
         // Given...
         TrainTime expected = mock(TrainTime.class);
-        given(restTemplate.getForObject("http://railwatch.cyanelix.com/departures?from=KYN&to=BRI", TrainTime[].class))
+        given(urls.getDeparturesUrl("KYN", "BRI")).willReturn("http://example.com/departures?from=KYN&to=BRI");
+        given(restTemplate.getForObject("http://example.com/departures?from=KYN&to=BRI", TrainTime[].class))
                 .willReturn(new TrainTime[] { expected });
 
         // When...

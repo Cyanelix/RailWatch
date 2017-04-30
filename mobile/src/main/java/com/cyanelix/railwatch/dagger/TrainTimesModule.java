@@ -1,5 +1,6 @@
 package com.cyanelix.railwatch.dagger;
 
+import com.cyanelix.railwatch.config.Urls;
 import com.cyanelix.railwatch.service.times.TrainTimesClient;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -15,6 +16,6 @@ public class TrainTimesModule {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
-        return new TrainTimesClient(restTemplate, "http://railwatch.cyanelix.com/departures?from=KYN&to=BRI");
+        return new TrainTimesClient(restTemplate, new Urls());
     }
 }

@@ -1,14 +1,13 @@
 package com.cyanelix.railwatch;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 import com.cyanelix.railwatch.microtypes.EditTextId;
-import com.cyanelix.railwatch.microtypes.IntentKey;
 
 public class ChooseStationsActivity extends AppCompatActivity {
 
@@ -19,14 +18,10 @@ public class ChooseStationsActivity extends AppCompatActivity {
     }
 
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        putEditTextValueInIntent(intent, IntentKey.FROM_STATION, EditTextId.FROM_STATION);
-        putEditTextValueInIntent(intent, IntentKey.TO_STATION, EditTextId.TO_STATION);
-        startActivity(intent);
-    }
 
-    private void putEditTextValueInIntent(Intent intent, IntentKey intentKey, EditTextId editTextId) {
-        intent.putExtra(intentKey.getKey(), getEditTextValue(editTextId));
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @NonNull
