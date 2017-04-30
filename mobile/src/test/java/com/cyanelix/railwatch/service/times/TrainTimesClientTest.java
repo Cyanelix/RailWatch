@@ -11,6 +11,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import static org.hamcrest.core.Is.is;
@@ -32,11 +34,12 @@ public class TrainTimesClientTest {
     private TrainTimesClient trainTimesClient;
 
     @Test
-    public void noTrainTimesRetrieved_emptyArrayReturned() {
+    public void noTrainTimesRetrieved_emptyArrayReturned() throws URISyntaxException {
         // Given...
-        given(urls.getDeparturesUrl("KYN", "BRI")).willReturn("http://example.com/departures?from=KYN&to=BRI");
-        given(restTemplate.getForObject("http://example.com/departures?from=KYN&to=BRI", TrainTime[].class))
-                .willReturn(new TrainTime[0]);
+        URI uri = new URI("http://example.com/departures?from=KYN&to=BRI");
+
+        given(urls.getDeparturesUrl("KYN", "BRI")).willReturn(uri);
+        given(restTemplate.getForObject(uri, TrainTime[].class)).willReturn(new TrainTime[0]);
 
         // When...
         TrainTime[] trainTimes = trainTimesClient.getTrainTimes();
@@ -46,12 +49,12 @@ public class TrainTimesClientTest {
     }
 
     @Test
-    public void trainTimesRetrieved_arrayReturned() {
+    public void trainTimesRetrieved_arrayReturned() throws URISyntaxException {
         // Given...
+        URI uri = new URI("http://example.com/departures?from=KYN&to=BRI");
         TrainTime expected = mock(TrainTime.class);
-        given(urls.getDeparturesUrl("KYN", "BRI")).willReturn("http://example.com/departures?from=KYN&to=BRI");
-        given(restTemplate.getForObject("http://example.com/departures?from=KYN&to=BRI", TrainTime[].class))
-                .willReturn(new TrainTime[] { expected });
+        given(urls.getDeparturesUrl("KYN", "BRI")).willReturn(uri);
+        given(restTemplate.getForObject(uri, TrainTime[].class)).willReturn(new TrainTime[] { expected });
 
         // When...
         TrainTime[] trainTimes = trainTimesClient.getTrainTimes();
