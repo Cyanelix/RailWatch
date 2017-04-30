@@ -13,18 +13,14 @@ import dagger.Provides;
 @Module
 public class TrainTimesModule {
     @Provides
-    public TrainTimesClient provideTrainTimesClient() {
+    RestTemplate provideRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-        return new TrainTimesClient(restTemplate, new Urls());
+        return restTemplate;
     }
 
     @Provides
-    public ScheduleClient provideScheduleClient() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-        return new ScheduleClient(restTemplate, new Urls());
+    Urls urls() {
+        return new Urls();
     }
 }
