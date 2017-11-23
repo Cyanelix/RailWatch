@@ -14,6 +14,10 @@ public class Urls {
         return createURI(String.format("%s/schedules", BASE_URL));
     }
 
+    public URI getHeartbeatURI(String notificationTarget) {
+        return createURI(String.format("%s/heartbeat/%s", BASE_URL, notificationTarget));
+    }
+
     private URI createURI(String url) {
         try {
             return new URI(url);

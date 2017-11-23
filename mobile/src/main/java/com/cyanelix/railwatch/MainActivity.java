@@ -10,8 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.cyanelix.railwatch.domain.TrainTime;
+import com.cyanelix.railwatch.service.heartbeat.HeartbeatService;
 import com.cyanelix.railwatch.service.notification.NotificationService;
 import com.cyanelix.railwatch.service.times.TrainTimesService;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import javax.inject.Inject;
 
@@ -21,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     NotificationService notificationService;
+
+    @Inject
+    HeartbeatService heartbeatService;
 
     private ListView trainTimesList;
 
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         trainTimesList = (ListView) findViewById(R.id.train_times);
 
         getTrainTimes();
+        heartbeatService.sendHeartbeat(FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override
@@ -78,6 +84,5 @@ public class MainActivity extends AppCompatActivity {
 
             notificationService.notify(MainActivity.this, trainTimes);
         }
-
     }
 }
