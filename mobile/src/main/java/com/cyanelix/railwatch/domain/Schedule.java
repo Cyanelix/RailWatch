@@ -1,5 +1,8 @@
 package com.cyanelix.railwatch.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Schedule {
     private String startTime;
     private String endTime;
@@ -7,6 +10,11 @@ public class Schedule {
     private String fromStation;
     private String toStation;
     private String notificationTarget;
+    private String state;
+
+    public Schedule() {
+        // Required for Jackson deserialization.
+    }
 
     public Schedule(String startTime, String endTime, String[] days, String fromStation, String toStation, String notificationTarget) {
         this.startTime = startTime;
@@ -39,5 +47,9 @@ public class Schedule {
 
     public String[] getDays() {
         return days;
+    }
+
+    public String getState() {
+        return state;
     }
 }

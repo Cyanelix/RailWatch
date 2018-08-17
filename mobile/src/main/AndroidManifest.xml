@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.cyanelix.railwatch.ChooseStationsActivity"></activity>
+        <activity android:name="com.cyanelix.railwatch.ChooseStationsActivity" />
+        <activity android:name="com.cyanelix.railwatch.DeparturesActivity" />
     </application>
 
 </manifest>

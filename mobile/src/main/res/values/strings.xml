@@ -7,8 +7,9 @@
     <string name="button_send">Send</string>
     <string name="message">[message]</string>
     <string name="refresh">Refresh</string>
-    <string name="getting_times">Looking up train times...</string>
+    <string name="getting_times">Looking up train times…</string>
     <string name="choose_stations">Choose Stations</string>
+    <string name="show_times">Show Times</string>
     <string name="create_schedule_intro">Create a schedule to check times between specified stations, between specified times.</string>
     <string name="schedule_start_label">Schedule start time</string>
     <string name="schedule_start_hint">09:00</string>
@@ -22,4 +23,5 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
+    <string name="from_to_arrow"><![CDATA[->]]></string>
 </resources>

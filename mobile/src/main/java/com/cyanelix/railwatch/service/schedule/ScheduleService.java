@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 
 import com.cyanelix.railwatch.domain.Schedule;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class ScheduleService {
@@ -14,10 +16,14 @@ public class ScheduleService {
     public ScheduleService() { }
 
     public void createSchedule(Schedule schedule) {
-        new HttpRequestTask().execute(schedule);
+        new CreateScheduleTask().execute(schedule);
     }
 
-    private class HttpRequestTask extends AsyncTask<Schedule, Void, Void> {
+    public List<Schedule> getSchedules() {
+        return scheduleClient.getSchedules();
+    }
+
+    private class CreateScheduleTask extends AsyncTask<Schedule, Void, Void> {
         @Override
         protected Void doInBackground(Schedule... schedules) {
             scheduleClient.createSchedule(schedules[0]);

@@ -6,14 +6,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.cyanelix.railwatch.domain.TrainTime;
+import com.cyanelix.railwatch.domain.Schedule;
 import com.cyanelix.railwatch.service.heartbeat.HeartbeatService;
 import com.cyanelix.railwatch.service.notification.NotificationService;
+import com.cyanelix.railwatch.service.schedule.ScheduleService;
 import com.cyanelix.railwatch.service.times.TrainTimesService;
+import com.cyanelix.railwatch.ui.ScheduleArrayAdapter;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,12 +27,15 @@ public class MainActivity extends AppCompatActivity {
     TrainTimesService trainTimesService;
 
     @Inject
+    ScheduleService scheduleService;
+
+    @Inject
     NotificationService notificationService;
 
     @Inject
     HeartbeatService heartbeatService;
 
-    private ListView trainTimesList;
+    private ListView schedulesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
         ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
 
         setContentView(R.layout.activity_main);
-        trainTimesList = (ListView) findViewById(R.id.train_times);
+        schedulesList = (ListView) findViewById(R.id.schedules);
 
-        getTrainTimes();
+        getSchedules();
         heartbeatService.sendHeartbeat(FirebaseInstanceId.getInstance().getToken());
     }
 
@@ -54,8 +62,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (item.getItemId() == R.id.action_show_times) {
+            showDepartures();
+            return true;
+        }
+
         if (item.getItemId() == R.id.action_refresh) {
-            getTrainTimes();
+            getSchedules();
             return true;
         }
 
@@ -67,22 +80,35 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void getTrainTimes() {
-        new HttpRequestTask().execute();
+    private void showDepartures() {
+        Intent intent = new Intent(this, DeparturesActivity.class);
+        startActivity(intent);
     }
 
-    private class HttpRequestTask extends AsyncTask<Void, Void, TrainTime[]> {
+    private void getSchedules() {
+        new SchedulesTask().execute();
+    }
+
+    private class SchedulesTask extends AsyncTask<Void, Void, List<Schedule>> {
         @Override
-        protected TrainTime[] doInBackground(Void... params) {
-            return trainTimesService.getTrainTimes();
+        protected List<Schedule> doInBackground(Void... params) {
+            Comparator<Schedule> stateComparator = new Comparator<Schedule>() {
+                @Override
+                public int compare(Schedule o1, Schedule o2) {
+                    return o2.getState().compareTo(o1.getState());
+                }
+            };
+
+            List<Schedule> schedules = scheduleService.getSchedules();
+            Collections.sort(schedules, stateComparator);
+
+            return schedules;
         }
 
         @Override
-        protected void onPostExecute(TrainTime[] trainTimes) {
-            ArrayAdapter<TrainTime> timesAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, trainTimes);
-            trainTimesList.setAdapter(timesAdapter);
-
-            notificationService.notify(MainActivity.this, trainTimes);
+        protected void onPostExecute(List<Schedule> schedules) {
+            ScheduleArrayAdapter schedulesAdapter = new ScheduleArrayAdapter(MainActivity.this, 0, schedules);
+            schedulesList.setAdapter(schedulesAdapter);
         }
     }
 }
