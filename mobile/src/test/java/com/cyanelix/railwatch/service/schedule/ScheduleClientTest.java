@@ -42,7 +42,7 @@ public class ScheduleClientTest {
         // Given...
         URI uri = new URI("http://example.com/schedules");
         given(urls.getSchedulesURI()).willReturn(uri);
-        Schedule schedule = new Schedule("11:00", "12:00", new String[] {"Monday"}, "FOO", "BAR", "target", state);
+        Schedule schedule = new Schedule("11:00", "12:00", new String[] {"Monday"}, "FOO", "BAR", "target");
 
         // When...
         scheduleClient.createSchedule(schedule);
@@ -56,7 +56,7 @@ public class ScheduleClientTest {
         // Given...
         URI uri = new URI("http://example.com/schedules");
         given(urls.getSchedulesURI()).willReturn(uri);
-        Schedule schedule = new Schedule("11:00", "12:00", new String[] {"Monday"}, "FOO", "BAR", "target", state);
+        Schedule schedule = new Schedule("11:00", "12:00", new String[] {"Monday"}, "FOO", "BAR", "target");
 
         ResponseEntity<List<Schedule>> responseEntity = new ResponseEntity<>(Collections.singletonList(schedule), HttpStatus.OK);
 
