@@ -18,6 +18,10 @@ public class Urls {
         return createURI(String.format("%s/heartbeat/%s", BASE_URL, notificationTarget));
     }
 
+    public URI getUsersURI() {
+        return createURI(String.format("%s/users", BASE_URL));
+    }
+
     private URI createURI(String url) {
         try {
             return new URI(url);

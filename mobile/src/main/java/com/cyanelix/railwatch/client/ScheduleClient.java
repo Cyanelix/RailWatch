@@ -1,4 +1,4 @@
-package com.cyanelix.railwatch.service.schedule;
+package com.cyanelix.railwatch.client;
 
 import com.cyanelix.railwatch.config.Urls;
 import com.cyanelix.railwatch.domain.Schedule;
@@ -12,18 +12,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ScheduleClient {
+public class ScheduleClient extends AbstractClient {
     public static final ParameterizedTypeReference<List<Schedule>> SCHEDULES_LIST_TYPE
             = new ParameterizedTypeReference<List<Schedule>>() { };
 
-    private final RestTemplate restTemplate;
-
-    private final Urls urls;
-
     @Inject
     public ScheduleClient(RestTemplate restTemplate, Urls urls) {
-        this.restTemplate = restTemplate;
-        this.urls = urls;
+        super(restTemplate, urls);
     }
 
     public void createSchedule(Schedule schedule) {

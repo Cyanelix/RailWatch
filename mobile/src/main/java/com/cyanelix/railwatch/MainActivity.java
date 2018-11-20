@@ -10,15 +10,17 @@ import android.widget.ListView;
 
 import com.cyanelix.railwatch.domain.Schedule;
 import com.cyanelix.railwatch.service.heartbeat.HeartbeatService;
+import com.cyanelix.railwatch.service.notification.FirebaseIdFacade;
 import com.cyanelix.railwatch.service.notification.NotificationService;
 import com.cyanelix.railwatch.service.schedule.ScheduleService;
 import com.cyanelix.railwatch.service.times.TrainTimesService;
+import com.cyanelix.railwatch.service.user.UserService;
 import com.cyanelix.railwatch.ui.ScheduleArrayAdapter;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -35,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     HeartbeatService heartbeatService;
 
+    @Inject
+    UserService userService;
+
+    @Inject
+    FirebaseIdFacade firebaseIdFacade;
+
     private ListView schedulesList;
 
     @Override
@@ -42,11 +50,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
 
+        userService.createUserIfNotExists(getSharedPreferences("com.cyanelix.railwatch.prefs", MODE_PRIVATE));
+
         setContentView(R.layout.activity_main);
-        schedulesList = (ListView) findViewById(R.id.schedules);
+        schedulesList = findViewById(R.id.schedules);
 
         getSchedules();
-        heartbeatService.sendHeartbeat(FirebaseInstanceId.getInstance().getToken());
+
+        firebaseIdFacade.doWithFirebaseId(new Consumer<String>() {
+            @Override
+            public void accept(String firebaseId) {
+                heartbeatService.sendHeartbeat(firebaseId);
+            }
+        });
     }
 
     @Override

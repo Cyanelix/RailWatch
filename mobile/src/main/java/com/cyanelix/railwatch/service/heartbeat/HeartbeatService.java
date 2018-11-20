@@ -2,6 +2,8 @@ package com.cyanelix.railwatch.service.heartbeat;
 
 import android.os.AsyncTask;
 
+import com.cyanelix.railwatch.client.HeartbeatClient;
+
 import javax.inject.Inject;
 
 public class HeartbeatService {

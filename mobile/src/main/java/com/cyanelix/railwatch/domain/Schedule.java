@@ -9,20 +9,21 @@ public class Schedule {
     private String[] days;
     private String fromStation;
     private String toStation;
-    private String notificationTarget;
     private String state;
+    private String userId;
 
     public Schedule() {
         // Required for Jackson deserialization.
     }
 
-    public Schedule(String startTime, String endTime, String[] days, String fromStation, String toStation, String notificationTarget) {
+    public Schedule(String startTime, String endTime, String[] days, String fromStation, String toStation, String state, String userId) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.days = days;
         this.fromStation = fromStation;
         this.toStation = toStation;
-        this.notificationTarget = notificationTarget;
+        this.state = state;
+        this.userId = userId;
     }
 
     public String getStartTime() {
@@ -41,8 +42,8 @@ public class Schedule {
         return toStation;
     }
 
-    public String getNotificationTarget() {
-        return notificationTarget;
+    public String getUserId() {
+        return userId;
     }
 
     public String[] getDays() {

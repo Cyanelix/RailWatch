@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import com.cyanelix.railwatch.domain.Schedule;
 import com.cyanelix.railwatch.service.schedule.ScheduleService;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.cyanelix.railwatch.service.user.UserService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,12 +22,15 @@ public class ChooseStationsActivity extends AppCompatActivity {
     @Inject
     ScheduleService scheduleService;
 
+    @Inject
+    UserService userService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((RailWatchApp) getApplication()).getTrainTimesComponent().inject(this);
 
-        setContentView(com.cyanelix.railwatch.R.layout.activity_choose_stations);
+        setContentView(R.layout.activity_choose_stations);
     }
 
     public void sendMessage(View view) {
@@ -37,7 +40,8 @@ public class ChooseStationsActivity extends AppCompatActivity {
                 getSelectedDays(),
                 getEditTextValue(R.id.from_station),
                 getEditTextValue(R.id.to_station),
-                FirebaseInstanceId.getInstance().getToken());
+                "ENABLED",
+                userService.getUserId(getSharedPreferences("com.cyanelix.railwatch.prefs", MODE_PRIVATE)));
 
         scheduleService.createSchedule(schedule);
 
@@ -47,7 +51,7 @@ public class ChooseStationsActivity extends AppCompatActivity {
 
     @NonNull
     private String getEditTextValue(int id) {
-        EditText editText = (EditText) findViewById(id);
+        EditText editText = findViewById(id);
         return editText.getText().toString();
     }
 
@@ -68,7 +72,7 @@ public class ChooseStationsActivity extends AppCompatActivity {
     }
 
     private String getDayNameIfChecked(int id) {
-        CheckBox checkBox = (CheckBox) findViewById(id);
+        CheckBox checkBox = findViewById(id);
         if (checkBox.isChecked()) {
             return (String) checkBox.getText();
         }

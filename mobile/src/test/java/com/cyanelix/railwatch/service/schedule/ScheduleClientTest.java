@@ -1,5 +1,6 @@
 package com.cyanelix.railwatch.service.schedule;
 
+import com.cyanelix.railwatch.client.ScheduleClient;
 import com.cyanelix.railwatch.config.Urls;
 import com.cyanelix.railwatch.domain.Schedule;
 

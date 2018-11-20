@@ -1,4 +1,4 @@
-package com.cyanelix.railwatch.service.times;
+package com.cyanelix.railwatch.client;
 
 import android.util.Log;
 
@@ -9,21 +9,16 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
 
-public class TrainTimesClient {
-    private final Urls urls;
-
-    private final RestTemplate restTemplate;
-
+public class TrainTimesClient extends AbstractClient {
     @Inject
     public TrainTimesClient(RestTemplate restTemplate, Urls urls) {
-        this.restTemplate = restTemplate;
-        this.urls = urls;
+        super(restTemplate, urls);
     }
 
     public TrainTime[] getTrainTimes() {
         try {
             return restTemplate.getForObject(urls.getDeparturesUrl("KYN", "BRI"), TrainTime[].class);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             Log.e("TrainTimesClient", e.getMessage(), e);
             return null;
         }

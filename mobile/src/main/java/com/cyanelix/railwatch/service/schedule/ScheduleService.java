@@ -2,6 +2,7 @@ package com.cyanelix.railwatch.service.schedule;
 
 import android.os.AsyncTask;
 
+import com.cyanelix.railwatch.client.ScheduleClient;
 import com.cyanelix.railwatch.domain.Schedule;
 
 import java.util.List;

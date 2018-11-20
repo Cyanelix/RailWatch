@@ -1,5 +1,6 @@
 package com.cyanelix.railwatch.service.heartbeat;
 
+import com.cyanelix.railwatch.client.HeartbeatClient;
 import com.cyanelix.railwatch.config.Urls;
 
 import org.junit.Rule;

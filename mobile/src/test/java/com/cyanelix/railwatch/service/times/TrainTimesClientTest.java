@@ -1,5 +1,6 @@
 package com.cyanelix.railwatch.service.times;
 
+import com.cyanelix.railwatch.client.TrainTimesClient;
 import com.cyanelix.railwatch.config.Urls;
 import com.cyanelix.railwatch.domain.TrainTime;
 
